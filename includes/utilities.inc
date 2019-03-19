@@ -84,11 +84,10 @@ function islandora_newspaper_get_issues(AbstractObject $object) {
   else {
     $issues = islandora_newspaper_get_issues_sparql($object);
   }
-  
+  // Custom sort, force order by date.
   uasort($issues, function($a, $b) {
     return $a['issued']->getTimestamp() - $b['issued']->getTimestamp();
   });
-
   // Grab the PIDs...
   $get_pid = function ($o) {
     return $o['pid'];
@@ -96,11 +95,8 @@ function islandora_newspaper_get_issues(AbstractObject $object) {
   $pids = array_map($get_pid, $issues);
   // Make the PIDs the keys.
   $issues = count($pids) ? array_combine($pids, $issues) : array();
-
   return $issues;
 }
-
-
 
 /**
  * Gets all the issues that the given newspaper owns use the resource index.
